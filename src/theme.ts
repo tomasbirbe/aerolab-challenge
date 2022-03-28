@@ -1,6 +1,13 @@
 import { extendTheme } from "@chakra-ui/react";
 
 export const theme = extendTheme({
+  breakpoints: {
+    sm: "480px",
+    md: "768px",
+    lg: "1024px",
+    xl: "1280px",
+    "2xl": "1440px",
+  },
   semanticTokens: {
     colors: {
       hoverColor: "linear-gradient(0deg, rgba(67,197,243,0.8) 46%, rgba(46,218,251,0.8) 100%)",

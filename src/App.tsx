@@ -1,4 +1,4 @@
-import { Stack, Text, Image, Select, Button } from "@chakra-ui/react";
+import { Stack, Text, Image, Select, Button, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import api from "../api";
@@ -62,8 +62,8 @@ function App(): JSX.Element {
       <Stack as="header">
         {/* 480px first breakpoint */}
         <picture>
-          <source media="(min-width: 1024px)" srcSet={bannerLg} />
-          <source media="(min-width: 480px)" srcSet={bannerMd} />
+          <source media="(min-width: 1024px)" srcSet={bannerLg} width="1200px" />
+          <source media="(min-width: 480px)" srcSet={bannerMd} width="500px" />
           <Image
             align="start"
             alt="Blue banner with headset"
@@ -85,11 +85,12 @@ function App(): JSX.Element {
           </Select>
         </Stack>
 
-        <Stack align="center" spacing={4}>
+        <SimpleGrid columns={{ base: 1, md: 2, xl: 3, "2xl": 4 }} placeItems="center" spacing={4}>
           {products.map((product) => (
             <Stack
               key={product._id}
               align="center"
+              boxShadow="md"
               cursor="pointer"
               height="fit-content"
               id="card"
@@ -136,7 +137,7 @@ function App(): JSX.Element {
               <Text>{product.name}</Text>
             </Stack>
           ))}
-        </Stack>
+        </SimpleGrid>
       </Stack>
     </div>
   );
