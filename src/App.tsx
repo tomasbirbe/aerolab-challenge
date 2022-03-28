@@ -1,9 +1,13 @@
-import { Stack, Text, Image, Select, Button, Box, Grid } from "@chakra-ui/react";
+import { Stack, Text, Image, Select, Button } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
+import api from "../api";
 import logo from "../assets/aerolab-logo.svg";
 import coinIcon from "../assets/icons/coin.svg";
-import banner from "../assets/header-x5.jpg";
+import bannerLg from "../assets/header-x1.png";
+import bannerMd from "../assets/header-x4.jpg";
+
+import banner from "/assets/header-x3.jpg";
 
 interface Product {
   category: string;
@@ -21,14 +25,12 @@ const reqBody = {
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjQwYjFjOTMxNGQ5YzAwMWE1ODc3MGYiLCJpYXQiOjE2NDg0MDY5ODV9.Vgr8e4wbiY9MsgrDdOe_9-cUMjOCKqv-0oVrVb7iGxk",
+    Authorization: `Bearer ${api.key}`,
   },
 };
 
 function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     fetch(`https://coding-challenge-api.aerolab.co/products`, reqBody)
@@ -58,27 +60,32 @@ function App(): JSX.Element {
       </Stack>
 
       <Stack as="header">
-        <Image
-          align="start"
-          alt="Blue banner with headset"
-          height="300px"
-          objectFit="cover"
-          src={banner}
-          width="full"
-        />
+        {/* 480px first breakpoint */}
+        <picture>
+          <source media="(min-width: 1024px)" srcSet={bannerLg} />
+          <source media="(min-width: 480px)" srcSet={bannerMd} />
+          <Image
+            align="start"
+            alt="Blue banner with headset"
+            height="400px"
+            objectFit="cover"
+            src={banner}
+            width="full"
+          />
+        </picture>
       </Stack>
 
-      <Stack as="main">
+      <Stack as="main" paddingBlock={4} paddingInline={2}>
         <Stack direction="row" justify="space-between">
-          <Text>16 of 32 products</Text>
-          <Select width="fit-content">
+          <Text width="min-content">16 of 32 products</Text>
+          <Select bg="primary" borderRadius="full" color="text" width="max-content">
             <option>Most Recent</option>
             <option>Lowest Price</option>
             <option>Highest Price</option>
           </Select>
         </Stack>
 
-        <Stack spacing={4}>
+        <Stack align="center" spacing={4}>
           {products.map((product) => (
             <Stack
               key={product._id}
@@ -93,7 +100,7 @@ function App(): JSX.Element {
             >
               <Stack
                 _hover={{ opacity: 1 }}
-                bg="rgba(64, 201, 245, 0.8)"
+                bg="hoverColor"
                 height="full"
                 id="overlay"
                 justify="center"
@@ -105,7 +112,9 @@ function App(): JSX.Element {
                 width="full"
               >
                 <Stack align="center" flexDirection="row" spacing={0}>
-                  <Text fontSize={52}>12,0000</Text>
+                  <Text color="text" fontSize={52}>
+                    {product.cost}
+                  </Text>
                   <Image height="50px" src={coinIcon} width="50px" />
                 </Stack>
                 <Button borderRadius="full" textColor="blackAlpha.700" width="80%">
