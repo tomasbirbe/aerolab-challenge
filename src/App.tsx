@@ -20,6 +20,17 @@ interface Product {
   _id: string;
 }
 
+interface User {
+  createDate: string;
+  name: string;
+  points: number;
+  redeemHistory: Product[];
+  __v: number;
+  _id: string;
+}
+
+type Ordering = "lowestPrice" | "highestPrice";
+
 const reqBody = {
   method: "GET",
   headers: {
@@ -29,14 +40,58 @@ const reqBody = {
   },
 };
 
+const INITIAL_USER = {
+  name: "",
+  points: 0,
+  redeemHistory: [],
+  _id: "",
+  __v: 0,
+  createDate: "",
+};
+
 function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
+  const [user, setUser] = useState<User>(INITIAL_USER);
+  const [ordering, setOrdering] = useState<Ordering>("highestPrice");
 
   useEffect(() => {
     fetch(`https://coding-challenge-api.aerolab.co/products`, reqBody)
       .then((data) => data.json())
       .then((data) => setProducts(data));
+
+    fetch("https://coding-challenge-api.aerolab.co/user/me", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${api.key}`,
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => setUser(data));
   }, []);
+
+  function IHaveEnoughPoints(product: Product) {
+    return user.points >= product.cost;
+  }
+
+  function handleSelect(e: any) {
+    setOrdering(e.target.value);
+  }
+
+  function orderProducts(products: Product[]) {
+    if (ordering === "highestPrice") {
+      return products.sort((a, b) => b.cost - a.cost);
+    } else {
+      return products.sort((a, b) => a.cost - b.cost);
+    }
+  }
+
+  function handleRedeem(product: Product) {
+    if (IHaveEnoughPoints(product)) {
+      setUser((prevUser) => ({ ...prevUser, points: user.points - product.cost }));
+    }
+  }
 
   return (
     <div className="App">
@@ -51,9 +106,9 @@ function App(): JSX.Element {
       >
         <img alt="Aerolab's logo" height="35px" src={logo} width="35px" />
         <Stack>
-          <Text>John Kite</Text>
+          <Text>{user.name}</Text>
           <Stack align="center" direction="row" gap={1} spacing={0}>
-            <Text>600</Text>
+            <Text>{user.points}</Text>
             <Image alt="A coin icon" height="20px" src={coinIcon} width="20px" />
           </Stack>
         </Stack>
@@ -77,16 +132,22 @@ function App(): JSX.Element {
 
       <Stack as="main" paddingBlock={4} paddingInline={2}>
         <Stack direction="row" justify="space-between">
-          <Text width="min-content">16 of 32 products</Text>
-          <Select bg="primary" borderRadius="full" color="text" width="max-content">
-            <option>Most Recent</option>
-            <option>Lowest Price</option>
-            <option>Highest Price</option>
+          <Text width="min-content">16 of {products.length} products</Text>
+          <Select
+            bg="primary"
+            borderRadius="full"
+            color="text"
+            defaultValue="highestPrice"
+            width="max-content"
+            onChange={handleSelect}
+          >
+            <option value="highestPrice">Highest Price</option>
+            <option value="lowestPrice">Lowest Price</option>
           </Select>
         </Stack>
 
         <SimpleGrid columns={{ base: 1, md: 2, xl: 3, "2xl": 4 }} placeItems="center" spacing={4}>
-          {products.map((product) => (
+          {orderProducts(products).map((product) => (
             <Stack
               key={product._id}
               align="center"
@@ -113,13 +174,24 @@ function App(): JSX.Element {
                 width="full"
               >
                 <Stack align="center" flexDirection="row" spacing={0}>
-                  <Text color="text" fontSize={52}>
+                  <Text
+                    color="text"
+                    fontSize={52}
+                    textColor={IHaveEnoughPoints(product) ? "white" : "red.600"}
+                  >
                     {product.cost}
                   </Text>
                   <Image height="50px" src={coinIcon} width="50px" />
                 </Stack>
-                <Button borderRadius="full" textColor="blackAlpha.700" width="80%">
-                  Redeem now
+                <Button
+                  _disabled={{ opacity: 0.7 }}
+                  borderRadius="full"
+                  disabled={!IHaveEnoughPoints(product)}
+                  textColor="blackAlpha.700"
+                  width="80%"
+                  onClick={() => handleRedeem(product)}
+                >
+                  {IHaveEnoughPoints(product) ? "Redeem now!" : "Not enough points :("}
                 </Button>
               </Stack>
 
