@@ -37,8 +37,10 @@ function App(): JSX.Element {
     api.getUser().then((user: User) => setUser(user));
   }, []);
 
-  function handleSelect(e: any) {
-    setOrdering(e.target.value);
+  function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
+    const orderOption = e.target.value as Ordering;
+
+    setOrdering(orderOption);
   }
 
   function orderProducts(products: Product[]) {
