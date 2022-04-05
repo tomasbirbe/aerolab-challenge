@@ -13,7 +13,10 @@ import banner from "/assets/header-x3.jpg";
 
 import ProductItem from "./components/Product";
 
-type Ordering = "lowestPrice" | "highestPrice";
+enum Ordering {
+  lowestPrice = "LOWEST_PRICE",
+  highestPrice = "HIGHEST_PRICE",
+}
 
 const reqBody = {
   method: "GET",
@@ -36,7 +39,7 @@ const INITIAL_USER = {
 function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [user, setUser] = useState<User>(INITIAL_USER);
-  const [ordering, setOrdering] = useState<Ordering>("highestPrice");
+  const [ordering, setOrdering] = useState<Ordering>(Ordering.lowestPrice);
 
   useEffect(() => {
     fetch(`https://coding-challenge-api.aerolab.co/products`, reqBody)
@@ -60,16 +63,10 @@ function App(): JSX.Element {
   }
 
   function orderProducts(products: Product[]) {
-    if (ordering === "highestPrice") {
+    if (ordering === Ordering.highestPrice) {
       return products.sort((a, b) => b.cost - a.cost);
     } else {
       return products.sort((a, b) => a.cost - b.cost);
-    }
-  }
-
-  function handleRedeem(product: Product) {
-    if (IHaveEnoughPoints(product)) {
-      setUser((prevUser) => ({ ...prevUser, points: user.points - product.cost }));
     }
   }
 
@@ -77,12 +74,16 @@ function App(): JSX.Element {
     <div className="App">
       <Stack
         as="nav"
+        bg="white"
         boxShadow="md"
         direction="row"
         justify="space-between"
         paddingBlock={2}
         paddingInline={4}
+        position="sticky"
+        top="0"
         width="full"
+        zIndex="1"
       >
         <img alt="Aerolab's logo" height="35px" src={logo} width="35px" />
         <Stack>
@@ -121,19 +122,14 @@ function App(): JSX.Element {
             width="max-content"
             onChange={handleSelect}
           >
-            <option value="highestPrice">Highest Price</option>
-            <option value="lowestPrice">Lowest Price</option>
+            <option value={Ordering.highestPrice}>Highest Price</option>
+            <option value={Ordering.lowestPrice}>Lowest Price</option>
           </Select>
         </Stack>
 
         <SimpleGrid columns={{ base: 1, md: 2, xl: 3, "2xl": 4 }} placeItems="center" spacing={4}>
           {orderProducts(products).map((product) => (
-            <ProductItem
-              key={product._id}
-              handleRedeem={handleRedeem}
-              product={product}
-              userState={[user, setUser]}
-            />
+            <ProductItem key={product._id} product={product} userState={[user, setUser]} />
           ))}
         </SimpleGrid>
       </Stack>

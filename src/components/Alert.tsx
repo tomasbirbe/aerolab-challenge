@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 function Alert({ children }: { children: React.ReactNode }) {
   return (
     <SimpleGrid
+      bg="rgba(0,0,0, 0.5)"
       bottom="0"
       left="0"
       placeItems="center"
@@ -13,7 +14,9 @@ function Alert({ children }: { children: React.ReactNode }) {
       top="0"
       zIndex="1"
     >
-      <Stack spacing={0}>{children}</Stack>
+      <Stack spacing={0} zIndex="2">
+        {children}
+      </Stack>
     </SimpleGrid>
   );
 }

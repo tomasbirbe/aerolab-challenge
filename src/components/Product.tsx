@@ -9,23 +9,33 @@ import Alert from "./Alert";
 
 interface Props {
   product: Product;
-  handleRedeem: (product: Product) => void;
   userState: [user: User, setUser: React.Dispatch<React.SetStateAction<User>>];
 }
 
 export default function ProductItem({ product, userState }: Props) {
   const [user, setUser] = userState;
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showConfirmRedeem, setShowConfirmRedeem] = useState<boolean>(false);
 
   function IHaveEnoughPoints() {
     return user.points >= product.cost;
   }
 
-  function handleRedeem(product: Product) {
+  function tryToRedeem() {
     if (IHaveEnoughPoints()) {
-      setUser((prevUser: any) => ({ ...prevUser, points: user.points - product.cost }));
-      setShowAlert(true);
+      setShowConfirmRedeem(true);
     }
+  }
+
+  function handleRedeem(product: Product) {
+    setUser((prevUser: any) => ({ ...prevUser, points: user.points - product.cost }));
+    setShowConfirmRedeem(false);
+    setShowAlert(true);
+  }
+
+  function handleClose() {
+    setShowAlert(false);
+    setShowConfirmRedeem(false);
   }
 
   return (
@@ -60,16 +70,33 @@ export default function ProductItem({ product, userState }: Props) {
             </Text>
             <Image height="50px" src={coinIcon} width="50px" />
           </Stack>
-          <Button
-            _disabled={{ opacity: 0.7 }}
-            borderRadius="full"
-            disabled={!IHaveEnoughPoints()}
-            textColor="blackAlpha.700"
-            width="80%"
-            onClick={() => handleRedeem(product)}
-          >
-            {IHaveEnoughPoints() ? "Redeem now!" : "Not enough points :("}
-          </Button>
+          {showConfirmRedeem ? (
+            <Button
+              _active={{}}
+              _disabled={{ opacity: 0.7 }}
+              _focus={{}}
+              _hover={{}}
+              bg="green.400"
+              borderRadius="full"
+              disabled={!IHaveEnoughPoints()}
+              textColor="white"
+              width="80%"
+              onClick={() => handleRedeem(product)}
+            >
+              Confirm Redeem
+            </Button>
+          ) : (
+            <Button
+              _disabled={{ opacity: 0.7 }}
+              borderRadius="full"
+              disabled={!IHaveEnoughPoints()}
+              textColor="blackAlpha.700"
+              width="80%"
+              onClick={tryToRedeem}
+            >
+              {IHaveEnoughPoints() ? "Redeem now!" : "Not enough points :("}
+            </Button>
+          )}
         </Stack>
 
         <Image
@@ -85,15 +112,16 @@ export default function ProductItem({ product, userState }: Props) {
         </Text>
         <Text>{product.name}</Text>
       </Stack>
+
       {showAlert && (
         <Alert>
           <Stack
             bg="white"
             borderRadius={12}
-            boxShadow="lg"
+            boxShadow="xl"
             height="300px"
             justify="space-between"
-            paddingBlock={6}
+            paddingBlock={4}
             paddingInline={4}
             width="500px"
           >
@@ -104,13 +132,14 @@ export default function ProductItem({ product, userState }: Props) {
               <Text>Now you have {user.points}</Text>
               <Image height="25px" src={coinIcon} width="25px" />
             </Stack>
+            <Divider />
             <Button
               _active={{ bg: "#08a4c4" }}
               _focus={{}}
               _hover={{ bg: "#0abbdf" }}
               bg="primary"
               color="text"
-              onClick={() => setShowAlert(false)}
+              onClick={handleClose}
             >
               Close
             </Button>
