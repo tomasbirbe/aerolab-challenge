@@ -3,7 +3,6 @@ import type { User, Product } from "./types";
 import { Stack, Text, Image, Select, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-import api from "../api";
 import logo from "../assets/aerolab-logo.svg";
 import coinIcon from "../assets/icons/coin.svg";
 import bannerLg from "../assets/header-x1.png";
@@ -12,20 +11,12 @@ import bannerMd from "../assets/header-x4.jpg";
 import banner from "/assets/header-x3.jpg";
 
 import ProductItem from "./components/Product";
+import api from "./api/api";
 
 enum Ordering {
   lowestPrice = "LOWEST_PRICE",
   highestPrice = "HIGHEST_PRICE",
 }
-
-const reqBody = {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    Authorization: `Bearer ${api.key}`,
-  },
-};
 
 const INITIAL_USER = {
   name: "",
@@ -42,20 +33,8 @@ function App(): JSX.Element {
   const [ordering, setOrdering] = useState<Ordering>(Ordering.lowestPrice);
 
   useEffect(() => {
-    fetch(`https://coding-challenge-api.aerolab.co/products`, reqBody)
-      .then((data) => data.json())
-      .then((data) => setProducts(data));
-
-    fetch("https://coding-challenge-api.aerolab.co/user/me", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${api.key}`,
-      },
-    })
-      .then((data) => data.json())
-      .then((data) => setUser(data));
+    api.getProducts().then((products: Product[]) => setProducts(products));
+    api.getUser().then((user: User) => setUser(user));
   }, []);
 
   function handleSelect(e: any) {
