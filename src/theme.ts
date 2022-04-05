@@ -44,6 +44,7 @@ export const theme = extendTheme({
       body: {
         lineHeight: 1.5,
         webkitFontSmoothing: "antialiased",
+        overflow: "hidden",
       },
 
       main: {
@@ -63,8 +64,9 @@ export const theme = extendTheme({
         overflowWrap: "break-word",
       },
 
-      "#root, #__next": {
+      "#root": {
         isolation: "isolate",
+        overflow: "auto",
       },
     },
   },

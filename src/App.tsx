@@ -1,4 +1,6 @@
-import { Stack, Text, Image, Select, Button, SimpleGrid } from "@chakra-ui/react";
+import type { User, Product } from "./types";
+
+import { Stack, Text, Image, Select, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import api from "../api";
@@ -9,25 +11,7 @@ import bannerMd from "../assets/header-x4.jpg";
 
 import banner from "/assets/header-x3.jpg";
 
-interface Product {
-  category: string;
-  cost: number;
-  img: {
-    hdUrl: string;
-    url: string;
-  };
-  name: string;
-  _id: string;
-}
-
-interface User {
-  createDate: string;
-  name: string;
-  points: number;
-  redeemHistory: Product[];
-  __v: number;
-  _id: string;
-}
+import ProductItem from "./components/Product";
 
 type Ordering = "lowestPrice" | "highestPrice";
 
@@ -70,10 +54,6 @@ function App(): JSX.Element {
       .then((data) => data.json())
       .then((data) => setUser(data));
   }, []);
-
-  function IHaveEnoughPoints(product: Product) {
-    return user.points >= product.cost;
-  }
 
   function handleSelect(e: any) {
     setOrdering(e.target.value);
@@ -148,66 +128,12 @@ function App(): JSX.Element {
 
         <SimpleGrid columns={{ base: 1, md: 2, xl: 3, "2xl": 4 }} placeItems="center" spacing={4}>
           {orderProducts(products).map((product) => (
-            <Stack
+            <ProductItem
               key={product._id}
-              align="center"
-              boxShadow="md"
-              cursor="pointer"
-              height="fit-content"
-              id="card"
-              paddingBlock={2}
-              paddingInline={4}
-              position="relative"
-              width="fit-content"
-            >
-              <Stack
-                _hover={{ opacity: 1 }}
-                bg="hoverColor"
-                height="full"
-                id="overlay"
-                justify="center"
-                opacity={0}
-                placeItems="center"
-                position="absolute"
-                spacing={10}
-                transition="0.1s all ease-in-out"
-                width="full"
-              >
-                <Stack align="center" flexDirection="row" spacing={0}>
-                  <Text
-                    color="text"
-                    fontSize={52}
-                    textColor={IHaveEnoughPoints(product) ? "white" : "red.600"}
-                  >
-                    {product.cost}
-                  </Text>
-                  <Image height="50px" src={coinIcon} width="50px" />
-                </Stack>
-                <Button
-                  _disabled={{ opacity: 0.7 }}
-                  borderRadius="full"
-                  disabled={!IHaveEnoughPoints(product)}
-                  textColor="blackAlpha.700"
-                  width="80%"
-                  onClick={() => handleRedeem(product)}
-                >
-                  {IHaveEnoughPoints(product) ? "Redeem now!" : "Not enough points :("}
-                </Button>
-              </Stack>
-
-              <Image
-                align="center"
-                alt={`Image of ${product.name}`}
-                height="300px"
-                objectFit="cover"
-                src={product.img.url}
-                width="300px"
-              />
-              <Text fontSize="16px" textColor="blackAlpha.600">
-                {product.category}
-              </Text>
-              <Text>{product.name}</Text>
-            </Stack>
+              handleRedeem={handleRedeem}
+              product={product}
+              userState={[user, setUser]}
+            />
           ))}
         </SimpleGrid>
       </Stack>
