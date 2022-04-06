@@ -67,6 +67,7 @@ export const theme = extendTheme({
       "#root": {
         isolation: "isolate",
         overflow: "auto",
+        "scroll-behavior": "smooth",
       },
       "::-webkit-scrollbar": { width: "5px" },
       "::-webkit-scrollbar-thumb": { bg: "primary", borderRadius: "2px" },

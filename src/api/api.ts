@@ -1,5 +1,5 @@
-import api from "../../apiKey";
-import { Product, User } from "../types";
+import { Product, User } from "src/types";
+import api from "root/apiKey";
 
 const headers = {
   "Content-Type": "application/json",

@@ -1,9 +1,9 @@
-import type { Product, User } from "../types";
+import type { Product, User } from "src/types";
 
 import { Stack, Button, Text, Image, Divider } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-import coinIcon from "../../assets/icons/coin.svg";
+import coinIcon from "/assets/icons/coin.svg";
 
 import Alert from "./Alert";
 

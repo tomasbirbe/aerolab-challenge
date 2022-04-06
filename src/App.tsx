@@ -1,17 +1,16 @@
-import type { User, Product } from "./types";
+import type { User, Product } from "src/types";
 
 import { Stack, Text, Image, Select, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-import logo from "../assets/aerolab-logo.svg";
-import coinIcon from "../assets/icons/coin.svg";
-import bannerLg from "../assets/header-x1.png";
-import bannerMd from "../assets/header-x4.jpg";
-
+import logo from "/assets/aerolab-logo.svg";
+import coinIcon from "/assets/icons/coin.svg";
+import bannerLg from "/assets/header-x1.png";
+import bannerMd from "/assets/header-x4.jpg";
 import banner from "/assets/header-x3.jpg";
 
 import ProductItem from "./components/Product";
-import api from "./api/api";
+import api from "./api";
 
 enum Ordering {
   lowestPrice = "LOWEST_PRICE",
@@ -52,7 +51,7 @@ function App(): JSX.Element {
   }
 
   return (
-    <div className="App">
+    <div className="App" id="home">
       <Stack
         as="nav"
         bg="white"
@@ -60,17 +59,19 @@ function App(): JSX.Element {
         direction="row"
         justify="space-between"
         paddingBlock={2}
-        paddingInline={4}
+        paddingInline={6}
         position="sticky"
         top="0"
         width="full"
         zIndex="1"
       >
-        <img alt="Aerolab's logo" height="35px" src={logo} width="35px" />
+        <Stack align="center" as="a" href="#home" justify="center">
+          <Image alt="Aerolab's logo" height="50px" src={logo} width="50px" />
+        </Stack>
         <Stack>
-          <Text>{user.name}</Text>
-          <Stack align="center" direction="row" gap={1} spacing={0}>
-            <Text>{user.points}</Text>
+          <Text fontSize={24}>{user.name}</Text>
+          <Stack align="center" direction="row" gap={1} justify="flex-end" spacing={0}>
+            <Text fontSize={22}>{user.points}</Text>
             <Image alt="A coin icon" height="20px" src={coinIcon} width="20px" />
           </Stack>
         </Stack>
