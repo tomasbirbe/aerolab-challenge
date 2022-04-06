@@ -68,6 +68,8 @@ export const theme = extendTheme({
         isolation: "isolate",
         overflow: "auto",
       },
+      "::-webkit-scrollbar": { width: "5px" },
+      "::-webkit-scrollbar-thumb": { bg: "primary", borderRadius: "2px" },
     },
   },
 });
