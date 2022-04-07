@@ -1,6 +1,6 @@
 import type { User, Product } from "src/types";
 
-import { Stack, Text, Image, Select, SimpleGrid } from "@chakra-ui/react";
+import { Stack, Text, Image, Select } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import logo from "/assets/aerolab-logo.svg";
@@ -9,8 +9,9 @@ import bannerLg from "/assets/header-x1.png";
 import bannerMd from "/assets/header-x4.jpg";
 import banner from "/assets/header-x3.jpg";
 
-import ProductItem from "./components/Product";
 import api from "./api";
+import Products from "./components/Products";
+import Pagination from "./components/Pagination";
 
 enum Ordering {
   lowestPrice = "LOWEST_PRICE",
@@ -30,11 +31,20 @@ function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [user, setUser] = useState<User>(INITIAL_USER);
   const [ordering, setOrdering] = useState<Ordering>(Ordering.lowestPrice);
+  const [productsPerPage, setProductsPerPage] = useState<number>(16);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pages, setPages] = useState<number[]>([]);
 
   useEffect(() => {
     api.getProducts().then((products: Product[]) => setProducts(products));
     api.getUser().then((user: User) => setUser(user));
   }, []);
+
+  useEffect(() => {
+    for (let i = 0; i < products.length / productsPerPage; i++) {
+      setPages((prevPages) => [...prevPages, i + 1]);
+    }
+  }, [products]);
 
   function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
     const orderOption = e.target.value as Ordering;
@@ -78,7 +88,6 @@ function App(): JSX.Element {
       </Stack>
 
       <Stack as="header">
-        {/* 480px first breakpoint */}
         <picture>
           <source media="(min-width: 1024px)" srcSet={bannerLg} width="1200px" />
           <source media="(min-width: 480px)" srcSet={bannerMd} width="500px" />
@@ -109,11 +118,16 @@ function App(): JSX.Element {
           </Select>
         </Stack>
 
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 3, "2xl": 4 }} placeItems="center" spacing={4}>
-          {orderProducts(products).map((product) => (
-            <ProductItem key={product._id} product={product} userState={[user, setUser]} />
-          ))}
-        </SimpleGrid>
+        <Products
+          products={[
+            ...orderProducts(products).slice(
+              (currentPage - 1) * productsPerPage,
+              currentPage * productsPerPage,
+            ),
+          ]}
+          userState={[user, setUser]}
+        />
+        <Pagination currentPageState={[currentPage, setCurrentPage]} pages={pages} />
       </Stack>
     </div>
   );
