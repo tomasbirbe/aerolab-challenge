@@ -1,5 +1,5 @@
-import { Button, Stack } from "@chakra-ui/react";
-import React from "react";
+import { Button, Stack, Text } from "@chakra-ui/react";
+import React, { useRef } from "react";
 
 interface Props {
   pages: number[];
@@ -7,29 +7,38 @@ interface Props {
     currentPage: number,
     setCurrentPage: React.Dispatch<React.SetStateAction<number>>,
   ];
+  pagesToShow?: number;
 }
 
-export default function Pagination({ pages, currentPageState }: Props) {
+export default function Pagination({ pages, currentPageState, pagesToShow = 3 }: Props) {
   const [currentPage, setCurrentPage] = currentPageState;
 
-  function handleChangePage(page: number) {
-    setCurrentPage(page);
+  const root = useRef(document.getElementById("root"));
+
+  function handlePreviousPage() {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+
+    if (root.current) root.current.scrollTop = 400;
+  }
+
+  function handleNextPage() {
+    if (currentPage < pages.length) {
+      setCurrentPage(currentPage + 1);
+    }
+
+    if (root.current) root.current.scrollTop = 400;
   }
 
   return (
-    <Stack align="center" justify="center">
-      <Stack as="ul" direction="row" listStyleType="none" marginBlockStart={8} spacing={2}>
-        {pages.map((page: number) => (
-          <li key={page}>
-            <Button
-              bg={currentPage === page ? "blue.400" : "gray.200"}
-              onClick={() => handleChangePage(page)}
-            >
-              {page}
-            </Button>
-          </li>
-        ))}
+    <Stack align="center" direction="row" justify="center" paddingBlock={4}>
+      {currentPage > 1 && <Button onClick={handlePreviousPage}>Anterior</Button>}
+      <Stack direction="row" spacing={0}>
+        <Text>{currentPage}&nbsp;</Text>
+        <Text color="blackAlpha.700">de {pages.length} </Text>
       </Stack>
+      {currentPage < pages.length && <Button onClick={handleNextPage}>Siguiente</Button>}
     </Stack>
   );
 }

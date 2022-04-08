@@ -72,28 +72,14 @@ export default function ProductItem({ product, userState }: Props) {
           </Stack>
           {showConfirmRedeem ? (
             <Button
-              _active={{}}
-              _disabled={{ opacity: 0.7 }}
-              _focus={{}}
-              _hover={{}}
-              bg="green.400"
-              borderRadius="full"
               disabled={!IHaveEnoughPoints()}
-              textColor="white"
-              width="80%"
+              variant="confirmRedeem"
               onClick={() => handleRedeem(product)}
             >
               Confirm Redeem
             </Button>
           ) : (
-            <Button
-              _disabled={{ opacity: 0.7 }}
-              borderRadius="full"
-              disabled={!IHaveEnoughPoints()}
-              textColor="blackAlpha.700"
-              width="80%"
-              onClick={tryToRedeem}
-            >
+            <Button disabled={!IHaveEnoughPoints()} variant="redeem" onClick={tryToRedeem}>
               {IHaveEnoughPoints() ? "Redeem now!" : "Not enough points :("}
             </Button>
           )}

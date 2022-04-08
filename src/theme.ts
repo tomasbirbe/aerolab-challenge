@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { m } from "framer-motion";
 
 export const theme = extendTheme({
   breakpoints: {
@@ -14,8 +15,48 @@ export const theme = extendTheme({
       primary: {
         default: "#0ad4fa",
       },
+      primaryHover: "#05C6ED",
+      primaryActive: "#04B7DA",
+
       text: {
         default: "#fff",
+      },
+    },
+  },
+  components: {
+    Button: {
+      baseStyle: {
+        bg: "primary",
+        color: "white",
+        _hover: {
+          bg: "primaryHover",
+        },
+        _active: {
+          bg: "primaryActive",
+        },
+      },
+      variants: {
+        redeem: {
+          _active: { bg: "gray.300" },
+          _disabled: { opacity: 0.7 },
+          _hover: { bg: "gray.200" },
+          bg: "white",
+          borderRadius: "full",
+          textColor: "blackAlpha.700",
+          width: "80%",
+        },
+        confirmRedeem: {
+          _disabled: { opacity: 0.7 },
+          bg: "green.400",
+          _hover: { bg: "green.500" },
+          _active: { bg: "green.600" },
+          borderRadius: "full",
+          textColor: "white",
+          width: "80%",
+        },
+      },
+      defaultProps: {
+        variant: null,
       },
     },
   },

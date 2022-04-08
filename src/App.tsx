@@ -1,6 +1,6 @@
 import type { User, Product } from "src/types";
 
-import { Stack, Text, Image, Select } from "@chakra-ui/react";
+import { Stack, Text, Image, Select, Input, Button } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import logo from "/assets/aerolab-logo.svg";
@@ -41,7 +41,7 @@ function App(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    for (let i = 0; i < products.length / productsPerPage; i++) {
+    for (let i = 0; i < products.length / 16; i++) {
       setPages((prevPages) => [...prevPages, i + 1]);
     }
   }, [products]);
@@ -50,6 +50,14 @@ function App(): JSX.Element {
     const orderOption = e.target.value as Ordering;
 
     setOrdering(orderOption);
+  }
+
+  function handleFilter() {
+    if (productsPerPage > 0) {
+      for (let i = 0; i < products.length / productsPerPage; i++) {
+        setPages((prevPages) => [...prevPages, i + 1]);
+      }
+    }
   }
 
   function orderProducts(products: Product[]) {
@@ -102,9 +110,20 @@ function App(): JSX.Element {
         </picture>
       </Stack>
 
-      <Stack as="main" paddingBlock={4} paddingInline={2}>
+      <Stack as="main" id="main" paddingBlock={4} paddingInline={2}>
         <Stack direction="row" justify="space-between">
-          <Text width="min-content">16 of {products.length} products</Text>
+          <Stack>
+            <Stack align="center" direction="row" justify="center" spacing={0}>
+              <Input
+                textAlign="center"
+                value={productsPerPage}
+                width="70px"
+                onChange={(e) => setProductsPerPage(Number(e.target.value))}
+              />
+              <Text>&nbsp;of {products.length}</Text>
+            </Stack>
+            <Button onClick={handleFilter}>Filtrar</Button>
+          </Stack>
           <Select
             bg="primary"
             borderRadius="full"
