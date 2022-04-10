@@ -105,18 +105,18 @@ export default function ProductItem({ product, userState }: Props) {
             bg="white"
             borderRadius={12}
             boxShadow="xl"
-            height="300px"
             justify="space-between"
             maxWidth="500px"
             minWidth="240px"
             paddingBlock={4}
-            paddingInline={8}
+            paddingInline={{base: 3, sm:8}}
+            marginInline={2}
           >
-            <Text fontSize={40}>Congratulations!</Text>
+            <Text fontSize={{base: 30, sm:40}}>Congratulations!🎉</Text>
             <Divider />
-            <Text fontSize={24}>You have redeemed {product.name}!</Text>
+            <Text fontSize={{base:20, sm:24}}>You have redeemed {product.name}!</Text>
             <Stack align="center" direction="row" spacing={0}>
-              <Text>Now you have {user.points}</Text>
+              <Text fontSize={{base: 18, sm:20}}>Now you have {user.points}</Text>
               <Image height="25px" src={coinIcon} width="25px" />
             </Stack>
             <Divider />
