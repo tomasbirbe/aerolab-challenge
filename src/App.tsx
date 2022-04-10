@@ -1,6 +1,6 @@
 import type { User, Product } from "src/types";
 
-import { Stack, Text, Image, Select, Input, Button, Box, SimpleGrid } from "@chakra-ui/react";
+import { Stack, Text, Image, Select, Input, Button, Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import logo from "/assets/aerolab-logo.svg";
@@ -9,7 +9,7 @@ import bannerLg from "/assets/header-x1.png";
 import bannerMd from "/assets/header-x4.jpg";
 import banner from "/assets/header-x3.jpg";
 
-import api from "./api";
+import api from "./services";
 import Products from "./components/Products";
 import Pagination from "./components/Pagination";
 
@@ -31,6 +31,9 @@ function App(): JSX.Element {
   const [products, setProducts] = useState<Product[]>([]);
   const [user, setUser] = useState<User>(INITIAL_USER);
   const [ordering, setOrdering] = useState<Ordering>(Ordering.lowestPrice);
+
+  // Pagination state
+
   const [productsPerPage, setProductsPerPage] = useState<number>(16);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pages, setPages] = useState<number[]>([]);
