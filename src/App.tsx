@@ -1,6 +1,6 @@
 import type { User, Product } from "src/types";
 
-import { Stack, Text, Image, Select, Input, Button } from "@chakra-ui/react";
+import { Stack, Text, Image, Select, Input, Button, Box, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import logo from "/assets/aerolab-logo.svg";
@@ -76,7 +76,7 @@ function App(): JSX.Element {
   }
 
   return (
-    <div className="App" id="home">
+    <Box className="App" id="home" margin="auto" maxWidth="1440px" placeItems="center">
       <Stack
         as="nav"
         bg="white"
@@ -167,7 +167,7 @@ function App(): JSX.Element {
         />
         <Pagination currentPageState={[currentPage, setCurrentPage]} pages={pages} />
       </Stack>
-    </div>
+    </Box>
   );
 }
 
