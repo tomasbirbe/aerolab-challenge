@@ -67,10 +67,6 @@ function App(): JSX.Element {
     }
   }
 
-  useEffect(() => {
-    console.log(pages);
-  }, [pages]);
-
   function orderProducts(products: Product[]) {
     if (ordering === Ordering.highestPrice) {
       return products.sort((a, b) => b.cost - a.cost);
