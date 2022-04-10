@@ -143,7 +143,7 @@ function App(): JSX.Element {
               <Text>&nbsp;of {products.length}</Text>
             </Stack>
             <Button form="filter" type="submit">
-              Filtrar
+              Apply
             </Button>
           </Stack>
           <Select

@@ -33,12 +33,12 @@ export default function Pagination({ pages, currentPageState }: Props) {
 
   return (
     <Stack align="center" direction="row" justify="center" paddingBlock={4}>
-      {currentPage > 1 && <Button onClick={handlePreviousPage}>Anterior</Button>}
+      {currentPage > 1 && <Button onClick={handlePreviousPage}>Back</Button>}
       <Stack direction="row" spacing={0}>
         <Text>{currentPage}&nbsp;</Text>
         <Text color="blackAlpha.700">de {pages.length} </Text>
       </Stack>
-      {currentPage < pages.length && <Button onClick={handleNextPage}>Siguiente</Button>}
+      {currentPage < pages.length && <Button onClick={handleNextPage}>Next</Button>}
     </Stack>
   );
 }
