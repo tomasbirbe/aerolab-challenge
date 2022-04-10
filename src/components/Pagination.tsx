@@ -10,7 +10,7 @@ interface Props {
   pagesToShow?: number;
 }
 
-export default function Pagination({ pages, currentPageState, pagesToShow = 3 }: Props) {
+export default function Pagination({ pages, currentPageState }: Props) {
   const [currentPage, setCurrentPage] = currentPageState;
 
   const root = useRef(document.getElementById("root"));

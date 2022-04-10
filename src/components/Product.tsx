@@ -107,9 +107,10 @@ export default function ProductItem({ product, userState }: Props) {
             boxShadow="xl"
             height="300px"
             justify="space-between"
+            maxWidth="500px"
+            minWidth="240px"
             paddingBlock={4}
-            paddingInline={4}
-            width="500px"
+            paddingInline={8}
           >
             <Text fontSize={40}>Congratulations!</Text>
             <Divider />
