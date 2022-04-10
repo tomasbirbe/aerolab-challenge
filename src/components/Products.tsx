@@ -15,7 +15,12 @@ export default function Products({ products, userState }: Props) {
 
   return (
     <>
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 3, "2xl": 4 }} placeItems="center" spacing={4}>
+      <SimpleGrid
+        columns={{ base: 1, md: 2, xl: 3, "2xl": 4 }}
+        paddingBlock={4}
+        placeItems="center"
+        spacing={4}
+      >
         {products.map((product: Product) => (
           <ProductItem key={product._id} product={product} userState={[user, setUser]} />
         ))}

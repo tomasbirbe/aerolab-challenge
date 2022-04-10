@@ -52,13 +52,24 @@ function App(): JSX.Element {
     setOrdering(orderOption);
   }
 
-  function handleFilter() {
-    if (productsPerPage > 0) {
-      for (let i = 0; i < products.length / productsPerPage; i++) {
-        setPages((prevPages) => [...prevPages, i + 1]);
+  function handleFilter(e: any) {
+    e.preventDefault();
+    const newProductsPerPage = Number(e.target[0].value);
+
+    if (newProductsPerPage > 0) {
+      setProductsPerPage(newProductsPerPage);
+      const updatedPages = [];
+
+      for (let i = 0; i < products.length / newProductsPerPage; i++) {
+        updatedPages.push(i + 1);
       }
+      setPages(updatedPages);
     }
   }
+
+  useEffect(() => {
+    console.log(pages);
+  }, [pages]);
 
   function orderProducts(products: Product[]) {
     if (ordering === Ordering.highestPrice) {
@@ -113,22 +124,34 @@ function App(): JSX.Element {
       <Stack as="main" id="main" paddingBlock={4} paddingInline={2}>
         <Stack direction="row" justify="space-between">
           <Stack>
-            <Stack align="center" direction="row" justify="center" spacing={0}>
+            <Stack
+              align="center"
+              as="form"
+              direction="row"
+              id="filter"
+              justify="center"
+              spacing={0}
+              onSubmit={handleFilter}
+            >
               <Input
+                borderColor="primary"
+                defaultValue={productsPerPage}
+                name="productsPerPage"
+                padding={0}
                 textAlign="center"
-                value={productsPerPage}
-                width="70px"
-                onChange={(e) => setProductsPerPage(Number(e.target.value))}
+                width="50px"
               />
               <Text>&nbsp;of {products.length}</Text>
             </Stack>
-            <Button onClick={handleFilter}>Filtrar</Button>
+            <Button form="filter" type="submit">
+              Filtrar
+            </Button>
           </Stack>
           <Select
             bg="primary"
             borderRadius="full"
             color="text"
-            defaultValue="highestPrice"
+            defaultValue={ordering}
             width="max-content"
             onChange={handleSelect}
           >
